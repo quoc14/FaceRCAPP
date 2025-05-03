@@ -1,0 +1,6 @@
+<h3>Bạn có chắc chắn muốn xoá học sinh {{ student.name }}?</h3>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">🗑️ Đồng ý xoá</button>
+    <a href="{% url 'student_list' %}">Huỷ</a>
+</form>

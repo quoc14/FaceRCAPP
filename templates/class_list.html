@@ -1,0 +1,28 @@
+<!-- templates/class_list.html -->
+<h2>Danh sách lớp học</h2>
+<a href="{% url 'create_class' %}">➕ Thêm lớp mới</a>
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Tên lớp</th><th>Khối</th><th>Level</th><th>Phòng học</th><th>Sĩ số</th><th>🛠️ Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cls in classes %}
+        <tr>
+            <td>{{ cls.name }}</td>
+            <td>{{ cls.grade }}</td>
+            <td>{{ cls.level }}</td>
+            <td>{{ cls.room }}</td>
+            <td>{{ cls.students.count }}</td>
+            <td>
+                <a href="{% url 'edit_class' cls.id %}">✏️ Sửa</a> |
+                <a href="{% url 'delete_class' cls.id %}">🗑️ Xoá</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>
+    <a href="{% url 'admin_dashboard' %}">⬅️ Quay lại Trang chính của Admin</a>
+</p>

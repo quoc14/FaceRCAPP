@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if schedule %}Chỉnh sửa{% else %}Thêm{% endif %} Lịch học</title>
+</head>
+<body>
+    <h2>{% if schedule %}✏️ Sửa{% else %}➕ Thêm{% endif %} lịch học</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Lớp:</label>
+        <select name="class_id">
+            {% for cls in classes %}
+            <option value="{{ cls.id }}" {% if schedule and schedule.class_obj.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Thứ:</label>
+        <select name="day_of_week">
+            <option value="2" {% if schedule and schedule.day_of_week == 2 %}selected{% endif %}>Thứ 2</option>
+            <option value="3" {% if schedule and schedule.day_of_week == 3 %}selected{% endif %}>Thứ 3</option>
+            <option value="4" {% if schedule and schedule.day_of_week == 4 %}selected{% endif %}>Thứ 4</option>
+            <option value="5" {% if schedule and schedule.day_of_week == 5 %}selected{% endif %}>Thứ 5</option>
+            <option value="6" {% if schedule and schedule.day_of_week == 6 %}selected{% endif %}>Thứ 6</option>
+            <option value="7" {% if schedule and schedule.day_of_week == 7 %}selected{% endif %}>Thứ 7</option>
+            <option value="8" {% if schedule and schedule.day_of_week == 8 %}selected{% endif %}>Chủ Nhật</option>
+        </select><br>
+
+
+        <label>Giờ bắt đầu:</label>
+        <input type="time" name="start_time" value="{{ schedule.start_time|default:'' }}"><br>
+
+        <label>Giờ kết thúc:</label>
+        <input type="time" name="end_time" value="{{ schedule.end_time|default:'' }}"><br>
+
+        
+
+        <button type="submit">Lưu</button>
+    </form>
+</body>
+</html>

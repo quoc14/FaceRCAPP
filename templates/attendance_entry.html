@@ -1,0 +1,48 @@
+<h2>📝 Nhập tình trạng điểm danh</h2>
+
+<form method="get">
+    <label>Chọn lớp:</label>
+    <select name="class_id" required>
+        <option value="">-- Chọn lớp --</option>
+        {% for c in classes %}
+            <option value="{{ c.id }}" {% if c.id == selected_class_id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Chọn ngày:</label>
+    <input type="date" name="date" value="{{ selected_date }}" required>
+
+    <button type="submit">🔍 Xem danh sách</button>
+</form>
+
+{% if selected_date and attendance_data %}
+    <form method="POST">
+        {% csrf_token %}
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr>
+                <th>Mã HS</th>
+                <th>Họ tên</th>
+                <th>Trạng thái hiện tại</th>
+                <th>Chọn trạng thái mới</th>
+            </tr>
+            {% for item in attendance_data %}
+                <tr>
+                    <td>{{ item.student.student_code }}</td>
+                    <td>{{ item.student.name }}</td>
+                    <td style="text-align: center;">{{ item.status_icon }}</td>
+                    <td>
+                        <select name="status_{{ item.student.id }}">
+                            <option value="">-- Không thay đổi --</option>
+                            <option value="on_time">✅ Đúng giờ</option>
+                            <option value="late">🕒 Đi muộn</option>
+                            <option value="absent">❌ Vắng</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">💾 Lưu thay đổi</button>
+    </form>
+{% endif %}
+<p><a href="{% url 'teacher_dashboard' %}">⬅️ Quay lại</a></p>

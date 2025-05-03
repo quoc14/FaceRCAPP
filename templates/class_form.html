@@ -1,0 +1,8 @@
+<!-- templates/class_form.html -->
+<h2>{{ action }} lớp học</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Lưu</button>
+</form>
+<a href="{% url 'class_list' %}">⬅️ Quay lại danh sách</a>

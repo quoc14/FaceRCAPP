@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý Học phí</title>
+</head>
+<body>
+    <h2>💰 Quản lý học phí</h2>
+
+    <form method="get">
+        <label>Tháng:</label>
+        <select name="month">
+            {% for m in months %}
+                <option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Lớp:</label>
+        <select name="class_id">
+            <option value="">Toàn bộ</option>
+            {% for c in classes %}
+                <option value="{{ c.id }}" {% if c.id == class_id %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Lọc</button>
+    </form>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Mã HS</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Học phí tháng</th>
+            <th>Trạng thái</th>
+            <th>Ảnh minh chứng</th>
+            <th>Ngày gửi</th>
+            <th>✅ Đã duyệt</th>
+            <th>🛠️ Hành động</th>
+        </tr>
+
+        {% for item in students_records %}
+        <tr>
+            <td>{{ item.student.student_code }}</td>
+            <td>{{ item.student.name }}</td>
+            <td>{{ item.student.class_obj.name }}</td>
+            <td>1.000.000₫</td>
+            <td>
+                {% if item.record %}
+                    {% if item.record.status == 'confirmed' %}
+                        ✅ Đã đóng
+                    {% elif item.record.status == 'pending' %}
+                        ⏳ Chờ duyệt
+                    {% endif %}
+                {% else %}
+                    ❌ Chưa gửi minh chứng
+                {% endif %}
+            </td>
+            <td>
+                {% if item.record and item.record.proof_image %}
+                    <a href="{{ item.record.proof_image.url }}" target="_blank">📷 Xem</a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if item.record and item.record.submitted_at %}
+                    {{ item.record.submitted_at|date:"d/m H:i" }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if item.record and item.record.status == 'confirmed' %}
+                    ✅
+                {% else %}
+                    ❌
+                {% endif %}
+            </td>
+            <td>
+                {% if item.record and item.record.status == 'pending' %}
+                    <form method="POST" action="{% url 'confirm_tuition' item.record.id %}">
+                        {% csrf_token %}
+                        <button type="submit">✔️ Duyệt</button>
+                    </form>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="{% url 'admin_dashboard' %}">← Quay lại trang Dashboard</a></p>
+</body>
+</html>

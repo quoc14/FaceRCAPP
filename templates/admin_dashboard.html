@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>🎓 TRANG QUẢN TRỊ TRUNG TÂM</h1>
+
+    <ul>
+        <li><a href="{% url 'class_list' %}">📚 Quản lý lớp học</a></li>
+        <!-- sau này có thể thêm -->
+        <li><a href="{% url 'student_list' %}">👨‍🎓 Quản lý học sinh</a></li>
+        <li><a href="{% url 'schedule_list' %}">📅 Quản lý lịch học</a></li>
+        <li><a href="{% url 'tuition_list' %}">💰 Quản lý học phí</a></li>
+    </ul>
+
+    <p><a href="{% url 'logout' %}">Đăng xuất</a></p>
+</body>
+</html>

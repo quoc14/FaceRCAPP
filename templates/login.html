@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Đăng nhập</title>
+</head>
+<body>
+    <h2>Đăng nhập hệ thống</h2>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <label>Tên đăng nhập:</label>
+        <input type="text" name="username"><br>
+        <label>Mật khẩu:</label>
+        <input type="password" name="password"><br>
+        <button type="submit">Đăng nhập</button>
+    </form>
+</body>
+</html>

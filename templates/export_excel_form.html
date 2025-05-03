@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📤 Xuất Excel Tổng Kết</title>
+</head>
+<body>
+    <h2>📤 Xuất Excel Tổng Kết</h2>
+
+    <form method="GET" action="{% url 'export_excel' %}">
+        <label>Chọn lớp:</label>
+        <select name="class_id" required>
+            {% for c in classes %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Chọn tháng:</label>
+        <input type="month" name="month" value="{{ default_month|default:'' }}">
+
+        <button type="submit">📥 Tải về</button>
+    </form>
+
+    <p><a href="{% url 'teacher_dashboard' %}">⬅️ Quay lại trang giáo viên</a></p>
+</body>
+</html>

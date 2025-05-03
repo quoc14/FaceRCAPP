@@ -1,0 +1,22 @@
+<h2>{% if student %}Chỉnh sửa học sinh{% else %}Thêm học sinh mới{% endif %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Mã HS:</label>
+    <input type="text" name="student_code" value="{{ student.student_code|default:'' }}"><br>
+    <label>Họ tên:</label>
+    <input type="text" name="name" value="{{ student.name|default:'' }}"><br>
+    <label>Lớp:</label>
+    <select name="class_obj">
+        {% for cls in classes %}
+            <option value="{{ cls.id }}" {% if student.class_obj.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
+        {% endfor %}
+    </select><br>
+    <label>Tên PH:</label>
+    <input type="text" name="parent_name" value="{{ student.parent_name|default:'' }}"><br>
+    <label>SĐT PH:</label>
+    <input type="text" name="parent_phone" value="{{ student.parent_phone|default:'' }}"><br>
+    <label>SĐT HS:</label>
+    <input type="text" name="student_phone" value="{{ student.student_phone|default:'' }}"><br>
+    <button type="submit">Lưu</button>
+</form>
+<a href="{% url 'student_list' %}">← Trở lại danh sách</a>

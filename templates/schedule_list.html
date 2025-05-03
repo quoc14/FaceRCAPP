@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý Lịch học</title>
+</head>
+<body>
+    <h2>📅 Danh sách lịch học</h2>
+    <p><a href="{% url 'admin_dashboard' %}">⬅️ Quay lại Dashboard</a></p>
+    <p><a href="{% url 'schedule_create' %}">➕ Thêm lịch học</a></p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Lớp</th>
+                <th>Thứ</th>
+                <th>Giờ bắt đầu – kết thúc</th>
+                <th>🛠️ Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.class_obj.name }}</td>
+                <td>
+                    {% if schedule.day_of_week == 8 %}
+                        CN
+                    {% else %}
+                        T{{ schedule.day_of_week }}
+                    {% endif %}
+                </td>
+                <td>{{ schedule.start_time }} – {{ schedule.end_time }}</td>
+                <td>
+                    <a href="{% url 'schedule_edit' schedule.id %}">✏️</a>
+                    <a href="{% url 'schedule_delete' schedule.id %}" onclick="return confirm('Xoá lịch này?')">🗑️</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Chưa có lịch học nào</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

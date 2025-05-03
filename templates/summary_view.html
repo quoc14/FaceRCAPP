@@ -1,0 +1,59 @@
+{% load index_filter %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tổng hợp lớp theo tháng</title>
+</head>
+<body>
+    <h1>📋 Tổng hợp lớp theo tháng</h1>
+
+    <form method="GET">
+        <label>Chọn lớp:</label>
+        <select name="class_id">
+            {% for cls in classes %}
+                <option value="{{ cls.id }}" {% if cls.id == selected_class_id %}selected{% endif %}>{{ cls.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Chọn tháng:</label>
+        <input type="text" name="month" value="{{ selected_month }}">
+        <button type="submit">Xem</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>STT</th>
+            <th>Mã HS</th>
+            <th>Họ tên</th>
+            {% for header in column_headers %}
+                <th>{{ header }} - BTVN</th>
+                <th>{{ header }} - DD</th>
+            {% endfor %}
+            <th>KTT</th>
+            <th>Voucher</th>
+            <th>CC</th>
+            <th>Tổng kết</th>
+        </tr>
+
+        {% for row in student_data %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ row.student.student_code }}</td>
+            <td>{{ row.student.name }}</td>
+
+            {% for s in row.scores %}
+                <td>{{ s }}</td>
+                <td>{{ row.attendances|index:forloop.counter0 }}</td>
+            {% endfor %}
+
+            <td>{{ row.summary.ktt_score|default:"" }}</td>
+            <td>{{ row.summary.voucher_score|default:"" }}</td>
+            <td>{{ row.summary.diligence_score|default:"" }}</td>
+            <td>{{ row.summary.final_score|default:"" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'teacher_dashboard' %}">⬅️ Quay về Dashboard</a></p>
+</body>
+</html>

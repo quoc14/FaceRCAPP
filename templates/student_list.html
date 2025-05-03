@@ -1,0 +1,46 @@
+<h2>Danh sách học sinh</h2>
+<a href="{% url 'admin_dashboard' %}">← Về trang Dashboard</a>
+
+<form method="get">
+    <input type="text" name="q" placeholder="Tìm kiếm..." value="{{ query }}">
+
+    <label>Lọc theo lớp:</label>
+    <select name="class_id">
+        <option value="">Tất cả</option>
+        {% for c in classes %}
+            <option value="{{ c.id }}" {% if c.id == class_id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<a href="{% url 'create_student' %}">➕ Thêm học sinh mới</a>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Mã HS</th>
+        <th>Họ tên</th>
+        <th>Lớp</th>
+        <th>Phụ huynh</th>
+        <th>SĐT PH</th>
+        <th>SĐT HS</th>
+        <th>Hành động</th>
+    </tr>
+    {% for s in students %}
+    <tr>
+        <td>{{ s.student_code }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.class_obj.name }}</td>
+        <td>{{ s.parent_name }}</td>
+        <td>{{ s.parent_phone }}</td>
+        <td>{{ s.student_phone }}</td>
+        <td>
+            <a href="{% url 'update_student' s.id %}">✏️</a>
+            <a href="{% url 'delete_student' s.id %}">🗑️</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">Không có học sinh nào.</td></tr>
+    {% endfor %}
+</table>

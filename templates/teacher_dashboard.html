@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+</head>
+<body>
+    <h1>👨‍🏫 TRANG LÀM VIỆC CỦA GIÁO VIÊN</h1>
+
+    <ul>
+        <li><a href="{% url 'summary_view' %}">📋 Xem tổng hợp lớp theo tháng</a></li>
+        <li><a href="{% url 'homework_score_entry' %}">✏️ Nhập điểm BTVN</a></li>
+        <li><a href="{% url 'homework_link_entry' %}">🔗 Nhập link bài tập</a></li>
+        <li><a href="{% url 'attendance_entry' %}">📝 Nhập điểm danh</a></li>
+        <li><a href="{% url 'monthly_summary_entry' %}">🧾 Nhập điểm KTT, Voucher, Chuyên cần</a></li>
+        <li><a href="{% url 'export_excel' %}">📤 Xuất Excel tổng kết</a></li>
+    </ul>
+
+    <p><a href="{% url 'logout' %}">🚪 Đăng xuất</a></p>
+</body>
+</html>
