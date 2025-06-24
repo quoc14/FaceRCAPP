@@ -1,29 +1,40 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from students.models import Schedule
 from datetime import datetime
+from django.utils import timezone
+import pytz
+from students.models import Student, Schedule
+from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
-def schedule_today(request, class_id):
-    # Lấy ngày từ query param hoặc dùng hôm nay
-    date_str = request.GET.get('date', datetime.now().strftime("%Y-%m-%d"))
-    try:
-        date = datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
-        return Response({"error": "Ngày không hợp lệ. Định dạng đúng: YYYY-MM-DD"}, status=400)
+def schedule_today(request, student_code):
+    # Lấy học sinh
+    student = get_object_or_404(Student, student_code=student_code)
 
-    # Django weekday: 0=Mon, 6=Sun. Hệ thống: 2=T2, ..., 8=CN
-    day_of_week = date.weekday() + 2
+    # Lấy múi giờ Việt Nam
+    vietnam_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+    now_vn = datetime.now(vietnam_tz)
+    weekday = now_vn.isoweekday() + 1  # Vì isoweekday: Monday=1
 
-    schedules = Schedule.objects.filter(class_obj__id=class_id, day_of_week=day_of_week)
-    data = []
-    for schedule in schedules:
-        data.append({
-            "day": f"T{day_of_week}" if day_of_week <= 7 else "CN",
-            "start_time": schedule.start_time.strftime("%H:%M"),
-            "end_time": schedule.end_time.strftime("%H:%M"),
-            "room": schedule.class_obj.room
-            
-        })
+    # Lấy lịch học hôm nay
+    schedule = Schedule.objects.filter(class_obj=student.class_obj, day_of_week=weekday).first()
+    print(f"Today (VN): {now_vn}, weekday={weekday}")
 
-    return Response(data)
+    if not schedule:
+        return Response({'schedule': None})
+
+    # Định dạng ngày và giờ
+    formatted_date = now_vn.strftime("%d/%m/%Y")
+    formatted_time = schedule.start_time.strftime("%Hh%Mp")
+
+    # Lấy phòng
+    location = f"Room {student.class_obj.room}" if student.class_obj.room else "Phòng chưa cập nhật"
+
+    return Response({
+        'schedule': {
+            'subject': schedule.class_obj.name,
+            'date': formatted_date,
+            'time': formatted_time,
+            'location': location
+        }
+    })

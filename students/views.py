@@ -129,12 +129,24 @@ def student_list_view(request):
         'classes': Class.objects.all(),
     })
 
+import re
+
+def generate_next_student_code():
+    last_student = Student.objects.order_by('-student_code').first()
+    if last_student and re.match(r'^TDT\d{5}$', last_student.student_code):
+        last_number = int(last_student.student_code[3:])
+    else:
+        last_number = 0
+    next_number = last_number + 1
+    return f"TDT{next_number:05d}"
+
 @login_required
 def create_student_view(request):
     classes = Class.objects.all()
     if request.method == "POST":
+        student_code = generate_next_student_code()
         Student.objects.create(
-            student_code=request.POST.get('student_code'),
+            student_code=student_code,
             name=request.POST.get('name'),
             class_obj_id=request.POST.get('class_obj'),
             parent_name=request.POST.get('parent_name'),
@@ -142,7 +154,11 @@ def create_student_view(request):
             student_phone=request.POST.get('student_phone'),
         )
         return redirect('student_list')
-    return render(request, 'student_form.html', {'classes': classes})
+    return render(request, 'student_form.html', {
+        'classes': classes,
+        'auto_student_code': generate_next_student_code()
+    })
+
 
 @login_required
 def update_student_view(request, student_id):

@@ -3,10 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from students.models import Student, Homework, HomeworkScore
 
+import pytz
+def now_vietnam():
+    vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+    return datetime.now(vn_tz)
+
 @api_view(['GET'])
 def homework_summary_view(request, student_code):
     # Nếu không truyền month -> dùng tháng hiện tại
-    month = request.GET.get("month", datetime.now().strftime("%m/%Y"))
+    month = request.GET.get("month", now_vietnam().strftime("%m/%Y"))
 
     try:
         student = Student.objects.get(student_code=student_code)

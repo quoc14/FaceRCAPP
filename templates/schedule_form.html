@@ -1,40 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
     <title>{% if schedule %}Chỉnh sửa{% else %}Thêm{% endif %} Lịch học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>{% if schedule %}✏️ Sửa{% else %}➕ Thêm{% endif %} lịch học</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label>Lớp:</label>
-        <select name="class_id">
-            {% for cls in classes %}
-            <option value="{{ cls.id }}" {% if schedule and schedule.class_obj.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
-            {% endfor %}
-        </select><br>
+<body class="bg-light">
+    <div class="container py-4">
+        <h2 class="mb-4">
+            {% if schedule %}✏️ Sửa{% else %}➕ Thêm{% endif %} lịch học
+        </h2>
 
-        <label>Thứ:</label>
-        <select name="day_of_week">
-            <option value="2" {% if schedule and schedule.day_of_week == 2 %}selected{% endif %}>Thứ 2</option>
-            <option value="3" {% if schedule and schedule.day_of_week == 3 %}selected{% endif %}>Thứ 3</option>
-            <option value="4" {% if schedule and schedule.day_of_week == 4 %}selected{% endif %}>Thứ 4</option>
-            <option value="5" {% if schedule and schedule.day_of_week == 5 %}selected{% endif %}>Thứ 5</option>
-            <option value="6" {% if schedule and schedule.day_of_week == 6 %}selected{% endif %}>Thứ 6</option>
-            <option value="7" {% if schedule and schedule.day_of_week == 7 %}selected{% endif %}>Thứ 7</option>
-            <option value="8" {% if schedule and schedule.day_of_week == 8 %}selected{% endif %}>Chủ Nhật</option>
-        </select><br>
+        <form method="post" class="bg-white p-4 rounded shadow-sm border">
+            {% csrf_token %}
 
+            <div class="mb-3">
+                <label class="form-label">Lớp:</label>
+                <select name="class_id" class="form-select">
+                    {% for cls in classes %}
+                    <option value="{{ cls.id }}" {% if schedule and schedule.class_obj.id == cls.id %}selected{% endif %}>
+                        {{ cls.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label>Giờ bắt đầu:</label>
-        <input type="time" name="start_time" value="{{ schedule.start_time|default:'' }}"><br>
+            <div class="mb-3">
+                <label class="form-label">Thứ:</label>
+                <select name="day_of_week" class="form-select">
+                    <option value="2" {% if schedule and schedule.day_of_week == 2 %}selected{% endif %}>Thứ 2</option>
+                    <option value="3" {% if schedule and schedule.day_of_week == 3 %}selected{% endif %}>Thứ 3</option>
+                    <option value="4" {% if schedule and schedule.day_of_week == 4 %}selected{% endif %}>Thứ 4</option>
+                    <option value="5" {% if schedule and schedule.day_of_week == 5 %}selected{% endif %}>Thứ 5</option>
+                    <option value="6" {% if schedule and schedule.day_of_week == 6 %}selected{% endif %}>Thứ 6</option>
+                    <option value="7" {% if schedule and schedule.day_of_week == 7 %}selected{% endif %}>Thứ 7</option>
+                    <option value="8" {% if schedule and schedule.day_of_week == 8 %}selected{% endif %}>Chủ Nhật</option>
+                </select>
+            </div>
 
-        <label>Giờ kết thúc:</label>
-        <input type="time" name="end_time" value="{{ schedule.end_time|default:'' }}"><br>
+            <div class="mb-3">
+                <label class="form-label">Giờ bắt đầu:</label>
+                <input type="time" name="start_time" class="form-control" value="{{ schedule.start_time|default:'' }}">
+            </div>
 
-        
+            <div class="mb-3">
+                <label class="form-label">Giờ kết thúc:</label>
+                <input type="time" name="end_time" class="form-control" value="{{ schedule.end_time|default:'' }}">
+            </div>
 
-        <button type="submit">Lưu</button>
-    </form>
+            <button type="submit" class="btn btn-success">💾 Lưu</button>
+            <a href="{% url 'schedule_list' %}" class="btn btn-secondary">⬅️ Huỷ</a>
+        </form>
+    </div>
 </body>
 </html>

@@ -4,10 +4,13 @@ from datetime import datetime
 import calendar
 from students.models import MonthlySummary, Homework, HomeworkScore, Student
 from django.shortcuts import get_object_or_404
-
+import pytz
+def now_vietnam():
+    vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+    return datetime.now(vn_tz)
 @api_view(['GET'])
 def monthly_summary_view(request, student_id):
-    month_str = request.GET.get('month', datetime.now().strftime('%m/%Y'))
+    month_str = request.GET.get("month", now_vietnam().strftime("%m/%Y"))
     try:
         m, y = map(int, month_str.split("/"))
         start_date = datetime(y, m, 1).date()

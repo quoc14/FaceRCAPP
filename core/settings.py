@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+DEFAULT_CHARSET = 'utf-8'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,15 @@ SECRET_KEY = 'django-insecure-t6orrqg-$4d3cxisdc)q#0+1n@&@xf$!bc3e$va1-8zujx5xj5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "thayductoanhalong.site",
+    "localhost",
+    "127.0.0.1"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://thayductoanhalong.site"
+]
 
 
 # Application definition
@@ -41,6 +50,8 @@ INSTALLED_APPS = [
     'students',
     'rest_framework',
 ]
+INSTALLED_APPS += ["django_extensions"]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

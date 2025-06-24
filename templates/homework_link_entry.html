@@ -1,34 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
     <title>Nhập link bài tập</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>🔗 Nhập link bài tập về nhà</h2>
+<body class="bg-light">
 
-    <form method="GET">
-        <label>Chọn lớp:</label>
-        <select name="class_id" onchange="this.form.submit()">
-            <option value="">-- Chọn lớp --</option>
-            {% for cls in classes %}
-                <option value="{{ cls.id }}" {% if cls.id|stringformat:'s' == selected_class_id %}selected{% endif %}>{{ cls.name }}</option>
-            {% endfor %}
-        </select>
-        <label>Chọn ngày:</label>
-        <input type="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
+<div class="container py-5">
+    <h2 class="text-primary mb-4">🔗 Nhập link bài tập về nhà</h2>
+
+    <form method="GET" class="row g-3 align-items-end mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Chọn lớp:</label>
+            <select name="class_id" class="form-select" onchange="this.form.submit()">
+                <option value="">-- Chọn lớp --</option>
+                {% for cls in classes %}
+                    <option value="{{ cls.id }}" {% if cls.id|stringformat:'s' == selected_class_id %}selected{% endif %}>{{ cls.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Chọn ngày:</label>
+            <input type="date" name="date" class="form-control" value="{{ selected_date }}" onchange="this.form.submit()">
+        </div>
     </form>
 
     {% if selected_class_id %}
-    <form method="POST">
+    <form method="POST" class="bg-white p-4 rounded shadow-sm border">
         {% csrf_token %}
         <input type="hidden" name="class_id" value="{{ selected_class_id }}">
         <input type="hidden" name="date" value="{{ selected_date }}">
-        <label>Link bài tập:</label>
-        <input type="url" name="link" style="width: 400px;" value="{{ existing_link }}"><br><br>
-        <button type="submit">💾 Lưu</button>
+
+        <div class="mb-3">
+            <label class="form-label">Link bài tập:</label>
+            <input type="url" name="link" class="form-control" value="{{ existing_link }}" placeholder="https://example.com/baitap">
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Lưu link</button>
     </form>
     {% endif %}
 
-    <p><a href="{% url 'teacher_dashboard' %}">⬅️ Quay lại</a></p>
+    <a href="{% url 'teacher_dashboard' %}" class="btn btn-secondary mt-4">⬅️ Quay lại</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

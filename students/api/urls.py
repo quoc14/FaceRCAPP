@@ -8,7 +8,7 @@ from students.api.views.homework import homework_summary_view
 from students.api.views.monthly import monthly_summary_view
 from students.api.views.tuition import get_tuition_info
 from students.api.views.tuition import confirm_tuition_payment
-
+from students.api.views.changepassword import change_password
 urlpatterns = [
     #login
     path('auth/login/', student_login, name='student_login'),
@@ -17,7 +17,7 @@ urlpatterns = [
     #dang ky khuon mat
     path('face/register/', register_face, name='register_face'),
     #lay lich hoc hom nay
-    path('classes/<int:class_id>/schedule/', schedule_today),
+    path('classes/schedule-today/<str:student_code>/', schedule_today, name='schedule_today'),
     # diem danh bang khuon mat
     path('attendance/face-checkin/', face_checkin_api),
     #xem diem va link btvn
@@ -30,6 +30,8 @@ urlpatterns = [
     path('tuition/<int:student_id>/', get_tuition_info, name='get_tuition_info'),
     #gui minh chung
     path('tuition/confirm-payment/', confirm_tuition_payment, name='confirm_tuition_payment'),
+    # change-password
+    path('auth/change-password/', change_password, name='change_password'),
 
 
 

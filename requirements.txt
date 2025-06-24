@@ -14,5 +14,3 @@ pandas>=2.0.0         # Nếu có dùng pandas cho xuất excel hoặc tính to�
 # Nếu dùng JWT sau này:
 djangorestframework-simplejwt>=5.2.0
 
-# Nếu dùng face recognition bằng thư viện face_recognition:
-face_recognition>=1.3.0

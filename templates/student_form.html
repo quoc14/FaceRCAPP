@@ -1,22 +1,58 @@
-<h2>{% if student %}Chỉnh sửa học sinh{% else %}Thêm học sinh mới{% endif %}</h2>
-<form method="POST">
-    {% csrf_token %}
-    <label>Mã HS:</label>
-    <input type="text" name="student_code" value="{{ student.student_code|default:'' }}"><br>
-    <label>Họ tên:</label>
-    <input type="text" name="name" value="{{ student.name|default:'' }}"><br>
-    <label>Lớp:</label>
-    <select name="class_obj">
-        {% for cls in classes %}
-            <option value="{{ cls.id }}" {% if student.class_obj.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
-        {% endfor %}
-    </select><br>
-    <label>Tên PH:</label>
-    <input type="text" name="parent_name" value="{{ student.parent_name|default:'' }}"><br>
-    <label>SĐT PH:</label>
-    <input type="text" name="parent_phone" value="{{ student.parent_phone|default:'' }}"><br>
-    <label>SĐT HS:</label>
-    <input type="text" name="student_phone" value="{{ student.student_phone|default:'' }}"><br>
-    <button type="submit">Lưu</button>
-</form>
-<a href="{% url 'student_list' %}">← Trở lại danh sách</a>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if student %}Chỉnh sửa{% else %}Thêm{% endif %} học sinh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h2 class="mb-4">{% if student %}✏️ Chỉnh sửa học sinh{% else %}➕ Thêm học sinh mới{% endif %}</h2>
+
+    <form method="POST" class="row g-3">
+        {% csrf_token %}
+
+        <div class="col-md-4">
+            <label class="form-label">Mã học sinh</label>
+            <input type="text" name="student_code" value="{{ auto_student_code }}" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">Họ tên</label>
+            <input type="text" name="name" value="{{ student.name|default:'' }}" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Lớp</label>
+            <select name="class_obj" class="form-select" required>
+                {% for cls in classes %}
+                    <option value="{{ cls.id }}" {% if student.class_obj.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Tên phụ huynh</label>
+            <input type="text" name="parent_name" value="{{ student.parent_name|default:'' }}" class="form-control">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">SĐT phụ huynh</label>
+            <input type="text" name="parent_phone" value="{{ student.parent_phone|default:'' }}" class="form-control">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">SĐT học sinh</label>
+            <input type="text" name="student_phone" value="{{ student.student_phone|default:'' }}" class="form-control">
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">💾 Lưu</button>
+            <a href="{% url 'student_list' %}" class="btn btn-outline-secondary ms-2">← Trở lại danh sách</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

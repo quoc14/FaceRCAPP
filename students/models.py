@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.hashers import make_password
 
 class Class(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -11,16 +12,29 @@ class Class(models.Model):
     def __str__(self):
         return self.name
 
+
 class Student(models.Model):
     id = models.BigAutoField(primary_key=True)
     student_code = models.CharField(max_length=20, unique=True)
+    password = models.CharField(max_length=128, blank=True, null=True)
     name = models.CharField(max_length=100)
-    class_obj = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='students')
+    class_obj = models.ForeignKey('Class', on_delete=models.CASCADE, related_name='students')
     parent_name = models.CharField(max_length=100, blank=True)
     parent_phone = models.CharField(max_length=20, blank=True)
     student_phone = models.CharField(max_length=20, blank=True)
     face_vector = models.JSONField(null=True, blank=True)
+    face_image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.password:
+            self.password = make_password("123456")  # ➡️ Hash mật khẩu mặc định
+        else:
+        # Nếu là mật khẩu chưa hash (dài < 20 ký tự) => hash
+            if len(self.password) < 20:  # hoặc kiểm tra khác, ví dụ không bắt đầu bằng 'pbkdf2_sha256'
+                self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
 
 class Teacher(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -91,7 +105,8 @@ class TuitionRecord(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     month = models.CharField(max_length=10)
     amount = models.IntegerField(default=1000000)
-    proof_image = models.ImageField(upload_to='tuition_proofs/', blank=True, null=True)
+    #proof_image = models.ImageField(upload_to='tuition_proofs/', blank=True, null=True)
+    proof_image_url = models.CharField(max_length=1000,blank=True, null=True)
     submitted_at = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=[
         ('pending', 'Chờ duyệt'),
