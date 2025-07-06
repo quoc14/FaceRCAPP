@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .forms import ClassForm
-from .models import Class, Schedule, TuitionRecord, Attendance, Homework, HomeworkScore, MonthlySummary
+from .models import Class, Schedule, TuitionRecord, Attendance, Homework, HomeworkScore, MonthlySummary, Notification
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -188,8 +188,19 @@ def delete_student_view(request, student_id):
 
 @login_required
 def schedule_list(request):
-    schedules = Schedule.objects.select_related('class_obj').all()
-    return render(request, 'schedule_list.html', {'schedules': schedules})
+    class_id = request.GET.get('class_id')
+    classes = Class.objects.all()
+    
+    if class_id:
+        schedules = Schedule.objects.select_related('class_obj').filter(class_obj_id=class_id)
+    else:
+        schedules = Schedule.objects.select_related('class_obj').all()
+    
+    return render(request, 'schedule_list.html', {
+        'schedules': schedules,
+        'classes': classes
+    })
+
 
 @login_required
 def schedule_create(request):
@@ -615,3 +626,20 @@ def attendance_entry(request):
         'selected_date': selected_date,
         'attendance_data': attendance_data,
     })
+
+@login_required
+def create_notification_view(request):
+    if request.method == "POST":
+        title = request.POST['title']
+        message = request.POST['message']
+        class_id = request.POST.get('target_class') or None
+
+        Notification.objects.create(
+            title=title,
+            message=message,
+            target_class_id=class_id
+        )
+        return redirect('admin_dashboard')
+
+    classes = Class.objects.all()
+    return render(request, 'notifications_create.html', {'classes': classes})

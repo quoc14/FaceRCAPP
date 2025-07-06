@@ -1,0 +1,42 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">📢 Gửi Thông Báo Mới</h4>
+                                <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">⬅️ Quay lại Dashboard</a>
+
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">📝 Tiêu đề</label>
+                            <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">📄 Nội dung</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Nhập nội dung thông báo..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">🎯 Lớp nhận</label>
+                            <select name="target_class" class="form-select">
+                                <option value="">📢 Tất cả lớp</option>
+                                {% for cls in classes %}
+                                    <option value="{{ cls.id }}">{{ cls.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Bạn có thể chọn lớp cụ thể hoặc để trống để gửi cho toàn bộ học sinh.</div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-success px-4">
+                            🚀 Gửi Thông Báo
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

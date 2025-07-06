@@ -9,6 +9,8 @@ from students.api.views.monthly import monthly_summary_view
 from students.api.views.tuition import get_tuition_info
 from students.api.views.tuition import confirm_tuition_payment
 from students.api.views.changepassword import change_password
+from students.api.views.notification import student_notifications
+
 urlpatterns = [
     #login
     path('auth/login/', student_login, name='student_login'),
@@ -32,6 +34,7 @@ urlpatterns = [
     path('tuition/confirm-payment/', confirm_tuition_payment, name='confirm_tuition_payment'),
     # change-password
     path('auth/change-password/', change_password, name='change_password'),
+    path('notifications/<str:student_code>/', student_notifications, name='student_notifications'),
 
 
 

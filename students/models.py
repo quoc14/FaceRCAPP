@@ -116,3 +116,12 @@ class TuitionRecord(models.Model):
 
     class Meta:
         unique_together = ('student', 'month')
+
+class Notification(models.Model):
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    target_class = models.ForeignKey(Class, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.title

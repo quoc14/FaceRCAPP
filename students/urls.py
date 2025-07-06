@@ -4,7 +4,7 @@ from . import views
 from .views import (
     RegisterFaceAPIView, login_view, logout_view,
     admin_dashboard, teacher_dashboard,
-    class_list_view, create_class_view, edit_class_view, delete_class_view
+    class_list_view, create_class_view, edit_class_view, delete_class_view, create_notification_view
 )
 urlpatterns = [
     path('api/register-face/', RegisterFaceAPIView.as_view()),
@@ -31,6 +31,8 @@ urlpatterns = [
     path('center-admin/schedules/<int:schedule_id>/delete/', views.schedule_delete, name='schedule_delete'),
     path('center-admin/tuition/', views.tuition_list, name='tuition_list'),
     path('center-admin/tuition/confirm/<int:record_id>/', views.confirm_tuition_payment, name='confirm_tuition'),
+    ## thong bao
+    path('center-admin/notifications/create/', create_notification_view, name='create_notification'),
 
     # tong ket lop theo thang cua hoc sinh
     path('teacher/summary/', views.summary_view, name='summary_view'),

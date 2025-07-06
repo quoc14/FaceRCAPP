@@ -30,7 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "thayductoanhalong.site",
     "localhost",
-    "127.0.0.1"
+    "127.0.0.1",
+    "0.0.0.0",
+    "188.166.209.6"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
